@@ -2,29 +2,29 @@
 
 **Table of Content**
 
-[Introduction](#Introduction)
+Introduction
 
-[Citation](#Citation)
+Citation
 
-[References](#References)
+References
 
-[User Guide](#UserGuide)
+User Guide
 
-[Requirements](#Requirements)
+Requirements
 
-[Repositories](#Repositories)
+Repositories
 
-[Representation of Vector Fields](#Representation)
+Representation of Vector Fields
 
-[Data Files](#DataFiles)
+Data Files
 
-[Preprocessing of Measured Displacement Fields](#Preprocessing)
+Preprocessing of Measured Displacement Fields
 
-[Calculation of Traction Stress from Measured Displacements](#Calculation)
+Calculation of Traction Stress from Measured Displacements
 
-[Folders Containing Data](#DataFolders)
+Folders Containing Data
 
-[Folders Containing Functions and Scripts](#FunctionFolders)
+Folders Containing Functions and Scripts
 
 **Introduction**
 
