@@ -8,7 +8,7 @@ function dspl = calcDspl(trac,E,varargin)
 % Input:
 %   trac = stress field as a SxSx2 tensor 
 %   E = Young's modulus of the hydrogel in Pascals
-%   brdx,brdy: x and y coordinates of the cell border
+%   brdx,brdy (optional): x and y coordinates of the cell border
 %
 % Output: strain field
 % 

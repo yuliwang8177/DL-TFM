@@ -16,8 +16,9 @@ function dsplFilt = filtDspl(dspl,brdx,brdy,varargin)
 %     exterior regions; must be specified if med1 and med2 are specified
 %   medNear,medFar (optional): window size of median filter to be applied  
 %     to near and far exterior regions, defaults to 5 and 9 respectively
-%   threshold: upper threshold of normalized derivatives; vectors with a
-%     normalized derivative > threshold are replaced with local average
+%   threshold (optional): upper threshold of normalized derivatives; vectors with a
+%     normalized derivative > threshold are replaced with local average,
+%     default = 4
 %
 % Output: filtered displacement field
 % 
@@ -95,32 +96,33 @@ end
 % correct displacements by residual displacements
 dsplC(:,:,1) = dspl(:,:,1)-residualX;
 dsplC(:,:,2) = dspl(:,:,2)-residualY;
-
-%% replace vectors with a large normalized derivative
-% kernel for LaPlace filter
-k1=[-0.5 -1 -0.5;-1 6 -1;-0.5 -1 -0.5];
-% kernel for averaging neighbors
-k2=[0.5 1 0.5;1 0 1;0.5 1 0.5]/6;
-
-% calculate derivatives
-df(:,:,1)=conv2(dsplC(:,:,1),k1,'same');
-df(:,:,2)=conv2(dsplC(:,:,2),k1,'same');
-
-% normalize against the magnitude of displacement
-mag=sqrt(dsplC(:,:,1).^2+dsplC(:,:,2).^2);
-df=df./mag;
-dfmag=sqrt(df(:,:,1).^2+df(:,:,2).^2);
-df(isinf(dfmag))=0;
-
-% values for replacement where the normalized derivative is too large
-rep1=conv2(dsplC(:,:,1),k2,'same');
-rep2=conv2(dsplC(:,:,2),k2,'same');
-
 dsplFiltX=dsplC(:,:,1);
 dsplFiltY=dsplC(:,:,2);
-dsplFiltX(dfmag>threshold)=rep1(dfmag>threshold);
-dsplFiltY(dfmag>threshold)=rep2(dfmag>threshold);
+
+%% replace vectors with a large normalized derivative
+if threshold>0
+    % kernel for LaPlace filter
+    k1=[-0.5 -1 -0.5;-1 6 -1;-0.5 -1 -0.5];
+    % kernel for averaging neighbors
+    k2=[0.5 1 0.5;1 0 1;0.5 1 0.5]/6;
+    
+    % calculate derivatives
+    df(:,:,1)=conv2(dsplC(:,:,1),k1,'same');
+    df(:,:,2)=conv2(dsplC(:,:,2),k1,'same');
+    
+    % normalize against the magnitude of displacement
+    mag=sqrt(dsplC(:,:,1).^2+dsplC(:,:,2).^2);
+    df=df./mag;
+    dfmag=sqrt(df(:,:,1).^2+df(:,:,2).^2);
+    
+    % values for replacement where the normalized derivative is too large
+    rep1=conv2(dsplC(:,:,1),k2,'same');
+    rep2=conv2(dsplC(:,:,2),k2,'same');
+    
+    dsplFiltX(dfmag>threshold)=rep1(dfmag>threshold);
+    dsplFiltY(dfmag>threshold)=rep2(dfmag>threshold);
+end
+
 dsplFilt(:,:,1)=dsplFiltX;
 dsplFilt(:,:,2)=dsplFiltY;
-
 end
