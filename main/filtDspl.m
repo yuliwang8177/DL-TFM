@@ -1,21 +1,22 @@
 function dsplFilt = filtDspl(dspl,brdx,brdy,varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% dsplFilt = filtDspl(dspl,brdx,brdy,buffer,medNear,medFar,threshold)
+% dsplFilt = filtDspl(dspl,brdx,brdy,buffer,range,medNear,medFar,threshold)
 %
 % Description:
 %   filter displacement vectors, first correct residual alignment errors,
 %   then apply a stronger median filter to vectors far away from the cell  
 %   and a weak median filter to vectors around the cell, finally
-%   replace vectors that has too large a normalized derivative with the
-%   average of neighbors
+%   replace vectors that has too large a normalized derivative against the
+%   neighbors
 %
 % Input:
 %   dspl: displacement field to filter
 %   brdx,brdy: x and y coordinates of the cell border 
-%   buffer1,buffer2 (optional): distance from the cell of near and far 
+%   buffer (optional): buffer zone around the cell to avoid filtering
+%   range (optional): distance from the cell of near and far 
 %     exterior regions; must be specified if med1 and med2 are specified
 %   medNear,medFar (optional): window size of median filter to be applied  
-%     to near and far exterior regions, defaults to 5 and 9 respectively
+%     to near and far exterior regions, defaults to 0 and 9 respectively
 %   threshold (optional): upper threshold of normalized derivatives; vectors with a
 %     normalized derivative > threshold are replaced with local average,
 %     default = 4
@@ -26,40 +27,46 @@ function dsplFilt = filtDspl(dspl,brdx,brdy,varargin)
 
 %% parse input
 warning('off','all');
-buffer = 20;
-medNear = 5;
+buffer = 3;
+range = 20;
+medNear = 0;
 medFar = 9;
 threshold = 4;
-if nargin==4
+if nargin==5
     buffer = varargin{1};
-elseif nargin==6
-    buffer = varargin{1};
-    medNear = varargin{2};
-    medFar = varargin{3};
+    range = varargin{2};
 elseif nargin==7
     buffer = varargin{1};
-    medNear = varargin{2};
-    medFar = varargin{3};
-    threshold = varargin{4};
+    range = varargin{2};
+    medNear = varargin{3};
+    medFar = varargin{4};
+elseif nargin==8
+    buffer = varargin{1};
+    range = varargin{2};
+    medNear = varargin{3};
+    medFar = varargin{4};
+    threshold = varargin{5};
 else
     disp("Error");
     exit;
 end    
 
 %% define cellular region and far exterior region
-[dimy,dimx] = size(dspl, [1 2]);
-[Y,X] = meshgrid(1:dimx,1:dimy);
+[ydim,xdim] = size(dspl, [1 2]);
+[Y,X] = meshgrid(1:xdim,1:ydim);
 
 %% define regions
 % define interior region
 pgnIn = polyshape(brdx,brdy);
+% include buffer zone
+pgnIn = polybuffer(pgnIn,buffer);
 % define near exterior
-pgnNear = polybuffer(pgnIn,buffer);
+pgnNear = polybuffer(pgnIn,range);
 pgnNear = xor(pgnNear,pgnIn);
 near = isinterior(pgnNear,X(:),Y(:));
 % define far exterior region
-pgnFar = polybuffer(pgnIn,buffer);
-pgnFar = xor(pgnFar,polyshape([1 1 dimx dimx],[dimy 1 1 dimy])); 
+pgnFar = polybuffer(pgnIn,range);
+pgnFar = xor(pgnFar,polyshape([1 1 xdim xdim],[ydim 1 1 ydim])); 
 far = isinterior(pgnFar,X(:),Y(:));
 
 % median filter displacements for near exterior
@@ -87,7 +94,7 @@ for i=1:numel(X)
     if far(i)
         dspl(X(i),Y(i),1) = dsplFarX(X(i),Y(i));
         dspl(X(i),Y(i),2) = dsplFarY(X(i),Y(i));
-    elseif near(i)
+    elseif near(i) && medNear>0
         dspl(X(i),Y(i),1) = dsplNearX(X(i),Y(i));
         dspl(X(i),Y(i),2) = dsplNearY(X(i),Y(i));
     end

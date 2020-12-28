@@ -18,7 +18,7 @@ for i=1:14
     
     trac = predictTrac(dsplGT,10670);
     
-    dspl = calcDspl(trac,10670,brdx,brdy);
+    dspl = calcDspl(trac,10670,brdx,brdy,5);
     TError{n,2} = errorDspl(dspl,dsplGT,brdx,brdy,10);
     n = n+1;
 end

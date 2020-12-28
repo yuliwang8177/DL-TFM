@@ -1,6 +1,6 @@
 %retrainTracnet
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% retrainTracnet(S)
+% retrainTracnet
 %
 % Description: take a pre-existing tracnet and finish training (if it is in
 % the Workspace or apply transfer learning (if it exists in a .mat file

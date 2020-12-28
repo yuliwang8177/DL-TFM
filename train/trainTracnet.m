@@ -1,7 +1,5 @@
 %trainTracnet
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% trainTracnet(S)
-%
 % Description: train a tracnet network from scratch
 %
 % Parameters: 

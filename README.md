@@ -77,7 +77,7 @@ To deploy deep learning for TFM, we have adapted a neural network for processing
 
 The displacement field likely requires additional filtering using the command filtDspl to reduce the noise and residual alignment errors. Type &quot;help filtDspl&quot; for the documentation.
 
-**Calculation of Traction Stress from Measured Displacements:** Apply the functiontrac = predictTrac(dspl,E) where dspl is the displacement field tensor as described above and E is Young&#39;s Modulus of the substrate in the unit of Pascals. The function loads pretrained neural networks in files named tracnet104.mat, tracnet160.mat, or tracnet256.mat, for three difference tensor sizes. Output traction stress is in the unit of Pascals. Neural networks as provided were trained for a Poisson ratio of 0.45.
+**Calculation of Traction Stress from Measured Displacements:** Apply the functiontrac = predictTrac(dspl,E) where dspl is the displacement field tensor as described above and E is Young&#39;s Modulus of the substrate in the unit of Pascals. The function loads pretrained neural networks in files in the search path named tracnet104.mat, tracnet160.mat, or tracnet256.mat, for three difference tensor sizes. Output traction stress is in the unit of Pascals. Neural networks as provided were trained for a Poisson ratio of 0.45.
 
 **Folders Containing Data:**
 

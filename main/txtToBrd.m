@@ -1,6 +1,6 @@
-function [brdx,brdy] = txtToBrd(brdFn,spacing)
+function [brdx,brdy] = txtToBrd(brdFn,size,spacing)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% [brdx,brdy] = txtToBrd(brdFn)
+% [brdx,brdy] = txtToBrd(brdFn,size,spacing)
 %
 % Description:
 %   generate x and y border coordinates from a text file
@@ -8,6 +8,7 @@ function [brdx,brdy] = txtToBrd(brdFn,spacing)
 % Input:
 %   brdFn: full path of text file containing the zero-origined coordinates 
 %     as alternating x and y coordinates separated by spaces
+%   size: size of image where the border was drawn 
 %   spacing: factor of conversion from input coordinates into output 
 %     coordinates, e.g. 5 if 800x800 is rescaled as 160x160   
 %
@@ -23,5 +24,5 @@ brd = load(brdFn);
 % read every other number since x and y coordinates are interspersed
 brdx = floor(brd(1:2:end)/spacing)+1; 
 brdy = floor(brd(2:2:end)/spacing)+1;
-brdy = dimy-brdy+1;
+brdy = size-brdy+1;
 end
