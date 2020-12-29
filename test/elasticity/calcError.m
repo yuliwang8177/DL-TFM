@@ -5,8 +5,6 @@ TError = table({'fn'},0,0,0,0,0,0,0,0,0,0,'VariableNames',{'File ID', ...
 S = 160;
 E = [2500 5000 10000 20000 40000];
 noise = 0.00765;
-fn = sprintf('../generic/cutoff.xlsx');
-TCutoff = readtable(fn);
 n = 1;
 for p = 1:55
     fnt = sprintf('testData/trac/MLData%04d.mat',p);
@@ -16,7 +14,6 @@ for p = 1:55
         continue;
     end
 
-    cutoff = TCutoff{TCutoff{:,1}==p,'x160'};
     brdx = fileData.brdx;
     brdy = fileData.brdy;
     tracGT = fileData.trac;
@@ -28,12 +25,12 @@ for p = 1:55
         fn = sprintf('#%04d',p);
         TError{n,1} = {fn};
         trac = predictTrac(dspl,E(i));
-        err = errorTrac(trac,tracGT,brdx,brdy,cutoff);
+        err = errorTrac(trac,tracGT,brdx,brdy);
         TError{n,i+1} = err;
         
         dspl = addNoise(dspl,noise);
         trac = predictTrac(dspl,E(i));
-        err = errorTrac(trac,tracGT,brdx,brdy,cutoff);
+        err = errorTrac(trac,tracGT,brdx,brdy);
         TError{n,i+6} = err;
     end
     n = n + 1;

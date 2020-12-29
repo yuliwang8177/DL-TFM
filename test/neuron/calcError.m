@@ -1,12 +1,6 @@
 clc;clear
 warning('off','all');
 TError = table({'fn'},0,0,'VariableNames',{'File ID','160','160 N'});
-fn = sprintf('cutoff.xlsx');
-if ~exist(fn)
-    TCutoff = [];
-else
-    TCutoff = readtable(fn);
-end
 
 S = 160;
 noise = 0.00765;
@@ -22,24 +16,19 @@ for p = 1:32
     brdx = fileData.brdx;
     brdy = fileData.brdy;
     tracGT = fileData.trac;
-    fn = sprintf('testData/strn/MLData%04d.mat',p);
+    fn = sprintf('testData/dspl/MLData%04d.mat',p);
     fileData = load(fn);
-    strn = fileData.strn;
-    if isempty(TCutoff)
-        cutoff = cutoffVal(tracGT,strn,brdx,brdy,90);
-    else
-        cutoff = TCutoff{TCutoff{:,1}==p,sprintf('x%d',S(i))};
-    end
+    dspl = fileData.dspl;
     
     fn = sprintf('#%04d',p);
     TError{n,1} = {fn};
-    trac = predictTrac(10670,strn);
-    err = errorTrac(trac,tracGT,brdx,brdy,cutoff);
+    trac = predictTrac(10670,dspl);
+    err = errorTrac(trac,tracGT,brdx,brdy);
     TError{n,2} = err;
     
-    strn = addNoise(strn,noise);
-    trac = predictTrac(10670,strn);
-    err = errorTrac(trac,tracGT,brdx,brdy,cutoff);
+    dspl = addNoise(dspl,noise);
+    trac = predictTrac(10670,dspl);
+    err = errorTrac(trac,tracGT,brdx,brdy);
     TError{n,3} = err;
     
     n = n + 1;

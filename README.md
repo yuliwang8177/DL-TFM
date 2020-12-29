@@ -65,7 +65,7 @@ To deploy deep learning for TFM, we have adapted a neural network for processing
 
 **User Guide**
 
-**Requirements:** MATLAB 2019b or later capable of performing 3D convolution for neural networks. In addition, installation of the FTTC plugin for ImageJ is recommended for the analysis of substrate strain and for the comparison of deep learning method with a widely used conventional method ([https://sites.google.com/site/qingzongtseng/tfm](https://sites.google.com/site/qingzongtseng/tfm)).
+**Requirement:** MATLAB 2019b or later capable of performing 3D convolution for neural networks. In addition, installation of the FTTC plugin for ImageJ is recommended for the analysis of substrate strain and for the comparison of deep learning method with a widely used conventional method ([https://sites.google.com/site/qingzongtseng/tfm](https://sites.google.com/site/qingzongtseng/tfm)).
 
 **Repositories:** all the MATLAB programs are distributed via GitHub. Due to the sheer size of the dataset, training and testing data are distributed via Box, using the same folder structure, at [https://cmu.box.com/s/n34hbfopwa3r6rftvtfn4ckc403hk43d](https://cmu.box.com/s/n34hbfopwa3r6rftvtfn4ckc403hk43d). Folders in the data repository should be copied to the corresponding folder locations for the programs. For example, test/elasticity/testData should be moved into the folder test/elasticity as downloaded from GitHub.
 
@@ -125,7 +125,7 @@ plotTrac.m: generate quiver plot and heat map of a traction stress field
 
 predictTrac.m: predict traction stress field from a displacement field
 
-tracCutoff.m: determine the threshold traction stress for generating a specified percentage of strain energy
+tracEnergyCutoff.m: determine the threshold percentile traction stress for generating a specified percentage of strain energy
 
 txtToBrd.m: generate x and y border coordinates from a text file
 
@@ -154,8 +154,6 @@ addNoise.m: apply Gaussian noise to a displacement field
 (In various subfolders)
 
 calcError.m (script): calculate the normalized root mean squared error of prediction relative to the ground truth, generate an error table TError in the workspace for simulated cells in testData
-
-calcCutoff.m (script): calculate the percentile traction stress responsible for generating 90% of the total strain energy, in subfolders of generic, keratocyte, and neuron. Generate a table of TCutoff in the workspace for simulated cells in testData.
 
 **Cells**
 
