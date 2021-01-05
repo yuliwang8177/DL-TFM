@@ -22,12 +22,12 @@ for p = 1:32
     
     fn = sprintf('#%04d',p);
     TError{n,1} = {fn};
-    trac = predictTrac(10670,dspl);
+    trac = predictTrac(dspl,10670);
     err = errorTrac(trac,tracGT,brdx,brdy);
     TError{n,2} = err;
     
     dspl = addNoise(dspl,noise);
-    trac = predictTrac(10670,dspl);
+    trac = predictTrac(dspl,10670);
     err = errorTrac(trac,tracGT,brdx,brdy);
     TError{n,3} = err;
     

@@ -1,5 +1,6 @@
 function plotTrac(trac,varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%function plotTrac(trac,brdx,brdy,scale,thinning)
 %
 % Description:
 %   render traction stress field as both quiver vector plot and heat map
@@ -32,7 +33,6 @@ elseif nargin==3
         scale = varargin{1};
         thinning = varargin{2}+1;
     else
-        
         brdx = varargin{1};
         brdy = varargin{2};
         scale = 0.002;

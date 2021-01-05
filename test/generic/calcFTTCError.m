@@ -2,9 +2,8 @@ clear; close all;
 warning('off','all');
 S = 104;
 Noise = 0.00765;
-TCutoff = readtable('cutoff.xlsx');
 k = 1;
-for p = 1:55
+for p = 25:25 %1:55
     fn = sprintf('testData%d/trac/MLData%04d.mat',S,p);
     try
         fileData = load(fn);
@@ -12,20 +11,18 @@ for p = 1:55
         continue;
     end
 
-    cutoff = TCutoff{TCutoff{:,1}==p,'x104'};
     brdx = fileData.brdx;
     brdy = fileData.brdy;
     tracGT = fileData.trac;
-    fn = sprintf('testData%d/strn/MLData%04d.mat',S,p);
+    fn = sprintf('testData%d/dspl/MLData%04d.mat',S,p);
     fileData = load(fn);   
-    strn = fileData.strn;
-    strn = addNoise(strn,Noise*S/104);
-    strnToTxt;
+    dspl = fileData.dspl;
+    %dspl = addNoise(dspl,Noise);
+    dsplToTxt(dspl,'c:/Temp/dspl.txt',7);
     
-    pause;
-    fttcToTrac;
-    e(k) = errorTrac(trac,tracGT,brdx,brdy,cutoff) % large stress only
-    %e(k) = errorTrac(trac,tracGT,brdx,brdy,0) % all interior stress
+    pause; % trigger FTTC here
+    trac = fttcToTrac('c:/Temp/Traction_dspl.txt',7);
+    e(k) = errorTrac(trac,tracGT,brdx,brdy) % large stress only
     k = k + 1;
 end
 e = e';

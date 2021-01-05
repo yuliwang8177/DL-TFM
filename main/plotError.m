@@ -1,6 +1,6 @@
-function plotError(fld,fldGT,brdx,brdy,varargin)
+function plotError(fld,fldGT,brdx,brdy)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% plotError(fld,fldGT,brdx,brdy,cutoff)
+% plotError(fld,fldGT,brdx,brdy)
 %
 % Description:
 %   render the error between a measureed field and ground truth as heat
@@ -10,8 +10,6 @@ function plotError(fld,fldGT,brdx,brdy,varargin)
 %   fld: measured field
 %   fldGT: ground truth field
 %   brdx,brdy: x and y coordinates of the cell border 
-%   cutoff (optional): percentile threshold, errors are not rendered if the
-%      magnitude of the stress falls below the cutoff percentile
 %
 % Output:
 %   heat map of the magnitude of error vectors within the cell border
@@ -20,11 +18,7 @@ function plotError(fld,fldGT,brdx,brdy,varargin)
 
 %% data preparation
 warning('off','all');
-if nargin==5
-    cutoff = varargin{1};
-else
-    cutoff = 0;
-end
+
 pgn = polyshape(brdx,brdy);
 [ydim,xdim,~] = size(fld);
 [Y,X] = meshgrid(1:xdim,1:ydim);
@@ -41,27 +35,26 @@ fldGTY = fldGT(:,:,2);
 fldY = fldY.*interior;
 fldGTY = fldGTY.*interior;
 
-fldMag = sqrt(fldX.^2+fldY.^2);
+%fldMag = (sqrt(fldX.^2+fldY.^2)+sqrt(fldGTX.^2+fldGTY.^2))/2;
 fldGTMag = sqrt(fldGTX.^2+fldGTY.^2);
 errorMag = sqrt((fldX-fldGTX).^2+(fldY-fldGTY).^2);
 
-threshold = prctile(fldMag(interior),cutoff);
-errorMag(fldMag<threshold) = 0;
 % normalize by the magnitude of the field
-fldErr = errorMag./(fldMag+fldGTMag)*2;
-fldErr(isnan(fldErr)) = 0;
+fldErr = errorMag./fldGTMag;
+fldErr(isnan(fldErr)|isinf(fldErr)) = 0;
 
 %% render heat map
 figure;
 pc = pcolor(fldErr');
 pc.LineStyle = 'none';
+pc.FaceColor = 'interp';
 xlim([0 xdim]);
 xticks(0:10:xdim);
 ylim([0 ydim]);
 yticks(0:10:ydim);
 
 %colormap(parula)
-colormap(hot)
+colormap(jet)
 colorbar;
 hold on
 

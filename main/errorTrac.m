@@ -51,6 +51,8 @@ if cutoff>0
     trac(:,:,2) = trac(:,:,2).*I;
     tracGT(:,:,1) = tracGT(:,:,1).*I;
     tracGT(:,:,2) = tracGT(:,:,2).*I;
+else
+    I = ones(ydim,xdim);
 end
 
 mse = sum((trac(:,:,1)-tracGT(:,:,1)).^2 + (trac(:,:,2)-tracGT(:,:,2)).^2,'all')/nnz(interior.*I);

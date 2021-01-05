@@ -10,7 +10,7 @@ function errorD = errorDspl(dspl,dsplGT,brdx,brdy,varargin)
 %   dspl: (calculated) displacement field
 %   dsplGT: (measured) ground truth displacement field
 %   brdx,brdy: x and y coordinates of the cell border
-%   buffer (optional): distance of around the cell to be included in the 
+%   buffer (optional): distance around the cell to be included in the 
 %      calculation
 %
 % Output: 

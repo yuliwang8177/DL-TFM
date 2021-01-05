@@ -8,7 +8,7 @@ ydim=floor((ymax+1)/spacing);
 
 for i=1:14
     try
-        brdfn=sprintf('processedDataFiles/brd%03dS.txt',i);
+        brdfn=sprintf('processedDataFiles/brd%03dS.trk',i);
         brd=load(brdfn);
         pivfn=sprintf('processedDataFiles/PIV_Stack%03d.txt',i);
         piv=load(pivfn);
@@ -24,7 +24,6 @@ for i=1:14
     piv(:,1)=floor((piv(:,1))/spacing)+1;
     piv(:,2)=floor((piv(:,2))/spacing)+1;
     piv(:,2)=ydim-piv(:,2)+1;
-    piv=piv(:,1:4);
     
     dspl=zeros(xdim,ydim,2);
     for j=1:length(piv)
@@ -32,7 +31,7 @@ for i=1:14
         dspl(piv(j,1),piv(j,2),2)=-piv(j,4)/spacing;
     end
     
-    dspl=filtDspl(dspl,brdx,brdy,5,25,5,9,3);
+    dspl=filtDspl(dspl,brdx,brdy,10,25,5,9,3.5);
     
     fn=sprintf('dspl/MLData%03d.mat',i);
     save(fn,'dspl','brdx','brdy');
