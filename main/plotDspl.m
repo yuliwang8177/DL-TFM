@@ -1,11 +1,11 @@
-function plotStrn(strn,varargin)
+function plotDspl(dspl,varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Description:
 %   render strain field as both quiver vector plot and heat map
 %
 % Input:
-%   strn: strain field
+%   dspl: displacement field
 %   brdx (optional): x coordinates of the border to be superimposed on the plot
 %   brdy (optional): y coordinates of the border to be superimposed on the plot
 %   scale (optional): relative length of quiver vectors, default = 5
@@ -47,16 +47,16 @@ qvwidth = 1; % line width for quiver plot
 brdwidth = 1; % line width for cell border
 
 %% data preparation
-mag = sqrt(strn(:,:,1).^2+strn(:,:,2).^2);
+mag = sqrt(dspl(:,:,1).^2+dspl(:,:,2).^2);
 
-[J,I]=meshgrid(1:size(strn,2),1:size(strn,1));
+[J,I]=meshgrid(1:size(dspl,2),1:size(dspl,1));
 indx = ceil(1:thinning:numel(I));
-D1 = strn(:,:,1);
+D1 = dspl(:,:,1);
 D1 = D1(indx);
 I = I(indx);
 
 indx = ceil(1:thinning:numel(J));
-D2 = strn(:,:,2);
+D2 = dspl(:,:,2);
 D2 = D2(indx);
 J = J(indx);
 
@@ -65,10 +65,10 @@ figure('name','Strain vectors');
 q = quiver(I,J,D1*scale,D2*scale,0);
 q.Color = color;
 q.LineWidth = qvwidth;
-xlim([0 size(strn,1)]);
-xticks(0:10:size(strn,1));
-ylim([0 size(strn,2)]);
-yticks(0:10:size(strn,2));
+xlim([0 size(dspl,1)]);
+xticks(0:10:size(dspl,1));
+ylim([0 size(dspl,2)]);
+yticks(0:10:size(dspl,2));
 if exist('brdx','var') && exist('brdy','var')
     hold on
     plot(brdx,brdy,'--b','LineWidth',brdwidth);
@@ -81,10 +81,10 @@ figure('name','Strain Heat Map');
 pc = pcolor(mag');
 pc.LineStyle = 'none';
 pc.FaceColor='interp';
-xlim([0 size(strn,1)]);
-xticks(0:10:size(strn,1));
-ylim([0 size(strn,2)]);
-yticks(0:10:size(strn,2));
+xlim([0 size(dspl,1)]);
+xticks(0:10:size(dspl,1));
+ylim([0 size(dspl,2)]);
+yticks(0:10:size(dspl,2));
 colormap(jet);
 colorbar;
 if exist('brdx','var') && exist('brdy','var')
