@@ -1,14 +1,16 @@
-function [brdx,brdy] = txtToBrd(brdFn,size,spacing)
+function [brdx,brdy] = txtToBrd(brdFn,sz,spacing)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% [brdx,brdy] = txtToBrd(brdFn,size,spacing)
+% [brdx,brdy] = txtToBrd(brdFn,sz,spacing)
 %
 % Description:
 %   generate x and y border coordinates from a text file
 %
 % Input:
 %   brdFn: full path of text file containing the zero-origined coordinates 
-%     as alternating x and y coordinates separated by spaces
-%   size: size of image where the border was drawn 
+%     as either a vector with alternating x and y coordinates separated by
+%     spaces, or a two column matrix with x and y coordinates in the first
+%     and cecond column respectively
+%   sz: size of the image where the border was drawn 
 %   spacing: factor of conversion from input coordinates into output 
 %     coordinates, e.g. 5 if 800x800 is rescaled as 160x160   
 %
@@ -21,8 +23,15 @@ function [brdx,brdy] = txtToBrd(brdFn,size,spacing)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 brd = load(brdFn);
-% read every other number since x and y coordinates are interspersed
-brdx = floor(brd(1:2:end)/spacing)+1; 
-brdy = floor(brd(2:2:end)/spacing)+1;
-brdy = size-brdy+1;
+if length(brd)==numel(brd)
+   % read every other number since x and y coordinates are interspersed
+   brdx = floor(brd(1:2:end)/spacing)+1; 
+   brdy = floor(brd(2:2:end)/spacing)+1;
+elseif size(brd,2)==2
+   % read x from the first column and y from the second column
+   brdx = floor(brd(:,1)'/spacing)+1;
+   brdy = floor(brd(:,2)'/spacing)+1;
+end
+sz = floor(sz/spacing);
+brdy = sz-brdy+1;
 end
